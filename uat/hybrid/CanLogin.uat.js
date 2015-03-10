@@ -20,6 +20,7 @@ describe("Can Login", function () {
       iOSDeviceUDID = process.env.IOS_UDID;
 
   function setupWithAppiumServer(serverConfig) {
+    console.log("in appium server");
     return wd.promiseChainRemote(serverConfig);
   }
 
@@ -29,17 +30,18 @@ describe("Can Login", function () {
 
   function addCapabilitiesAndInit(capabilities, driver) {
     var desired = _.clone(capabilities[platform]);
-    desired.app = path.join('../../', require("../helpers/apps")[platform + 'Hybrid']);
+//    desired.app = path.join('../../', require("../helpers/apps")[platform + 'Hybrid']);
 
     if (platform === 'ios' && iOSDeviceUDID) {
       desired.app = path.join('../../', require("../helpers/apps")[platform + 'Hybrid' + 'Device']);
       desired.udid = iOSDeviceUDID;
     }
 
-    if (platform === 'android') {
-      desired.appPackage = process.env.APP_PACKAGE;
-      desired.appActivity = process.env.APP_ACTIVITY;
-    }
+//    if (platform === 'android') {
+//        console.log("in appium server with android");
+//      desired.appPackage = 'com.the_experimenters.hybrid_sign_in';
+//      desired.appActivity = '.BeanThere';
+//    }
 
     if (process.env.SAUCE) {
       desired.name = platform + ' - Can login';
@@ -67,8 +69,8 @@ describe("Can Login", function () {
     driver = setupWithAppiumServer(serverConfig);
 
     setupLogging(driver);
-
     driver = addCapabilitiesAndInit(require("../helpers/capabilities"), driver);
+
 
     return switchToUIWebViewContext(driver);
   });
